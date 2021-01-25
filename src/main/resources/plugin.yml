@@ -1,3 +1,9 @@
 main: com.shanebeestudios.wse.WSE
 name: WorstServerEver
 version: '${project.version}'
+
+commands:
+  wse:
+    description: Base command for WorstServerEver
+    aliases:
+      - worstserverever

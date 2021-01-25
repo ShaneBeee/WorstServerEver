@@ -2,6 +2,8 @@ package com.shanebeestudios.wse.util;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,6 +11,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     private static final String PREFIX = "&7[&bW&3S&bE&7] &7";
+    private static final String PREFIX_CONSOLE = "&7[&bW&3S&bE&7] &7";
     private static final String PREFIX_ERROR = "&7[&bW&3S&bE &cERROR&7] &c";
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
@@ -24,12 +27,24 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
+    private static void send(CommandSender receiver, String format, Object... objects) {
+        receiver.sendMessage(getColString(PREFIX + String.format(format, objects)));
+    }
+
     public static void log(String format, Object... objects) {
-        Bukkit.getConsoleSender().sendMessage(getColString(PREFIX + String.format(format, objects)));
+       Bukkit.getConsoleSender().sendMessage(getColString(PREFIX_CONSOLE + String.format(format, objects)));
     }
 
     public static void error(String format, Object... objects) {
         Bukkit.getConsoleSender().sendMessage(getColString(PREFIX_ERROR + String.format(format, objects)));
+    }
+
+    public static void sendMessage(CommandSender receiver, String format, Object... objects) {
+        if (receiver == null || receiver instanceof ConsoleCommandSender) {
+            log(format, objects);
+        } else {
+            send(receiver, format, objects);
+        }
     }
 
 }
